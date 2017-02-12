@@ -7,15 +7,14 @@ import Data.String
 import Zabt.Freshen
 
 data Name = Name Int String
-  deriving (Eq, Ord)
 
-instance Show Name where
-  show (Name n s) 
+derive instance eqName :: Eq Name
+derive instance ordName :: Ord Name
+
+instance showName :: Show Name where
+  show (Name n s)
     | n == 0 = '\'' : s
     | otherwise = '\'' : s ++ show n
 
-instance IsString Name where
-  fromString = Name 0
-
-instance Freshen Name where
+instance freshenName :: Freshen Name where
   freshen (Name n s) = Name (n + 1) s

@@ -1,13 +1,10 @@
-{-# LANGUAGE StandaloneDeriving #-}
-{-# LANGUAGE FlexibleContexts #-}
-{-# LANGUAGE UndecidableInstances #-}
 
 module Zabt.Internal.Term where
 
 import Data.Set (Set)
-import qualified Data.Set as Set
+import Data.Set as Set
 import Data.Map (Map)
-import qualified Data.Map as Map
+import Data.Map as Map
 import Data.Maybe (fromMaybe)
 
 import Zabt.Internal.Index
@@ -24,10 +21,10 @@ data Term v f
     , project :: Nameless v f (Term v f)
     }
 
-deriving instance (Eq v, Eq (f (Term v f))) => Eq (Term v f)
-deriving instance (Ord v, Ord (f (Term v f))) => Ord (Term v f)
+derive instance eqTerm :: (Eq v, Eq (f (Term v f))) => Eq (Term v f)
+derive instance eqTerm :: (Ord v, Ord (f (Term v f))) => Ord (Term v f)
 
-instance (Show v, Show (Nameless v f (Term v f))) => Show (Term v f) where
+instance showTerm :: (Show v, Show (Nameless v f (Term v f))) => Show (Term v f) where
   showsPrec p t = showsPrec p (project t)
 
 -- | Returns the free variables used within a given @Term@.
@@ -52,11 +49,11 @@ var v = embed (Free v)
 
 abstract :: (Foldable f, Functor f, Ord v) => v -> Term v f -> Term v f
 abstract name = go zero where
-  go idx t 
+  go idx t
     | not (Set.member name (free t)) = t
-    | otherwise = 
+    | otherwise =
         Term (Set.delete name (free t)) $ case project t of
-          Free v 
+          Free v
             | v == name -> Bound idx
             | otherwise -> Free v
           Bound{} -> project t
@@ -68,10 +65,10 @@ substitute = substitute' . var
 
 substitute' :: (Functor f, Foldable f, Ord v) => Term v f -> (Term v f -> Term v f)
 substitute' value = go zero where
-  go idx t = 
+  go idx t =
     case project t of
       Free v -> t
-      Bound idx' 
+      Bound idx'
         | idx == idx' -> value
         | otherwise -> t
       Abstraction (Scope v t') -> embed (Abstraction (Scope v (go (next idx) t')))
@@ -88,8 +85,8 @@ subst ss = go where
 
 -- | Substitute some free variables from a finite map.
 substMap :: (Functor f, Foldable f, Ord v) => Map v (Term v f) -> (Term v f -> Term v f)
-substMap ss = subst (`Map.lookup` ss)
+substMap ss = subst (_ `Map.lookup` ss)
 
 -- | Substitute just one free variable.
-subst1 :: (Functor f, Foldable f, Ord v) => (v, Term v f) -> (Term v f -> Term v f)
-subst1 (v, value) = subst (\v' -> if v == v' then Just value else Nothing)
+subst1 :: (Functor f, Foldable f, Ord v) => Tuple v (Term v f) -> (Term v f -> Term v f)
+subst1 (Tuple v value) = subst (\v' -> if v == v' then Just value else Nothing)

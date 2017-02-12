@@ -2,7 +2,7 @@
 module Zabt.Freshen where
 
 import Data.Set (Set)
-import qualified Data.Set as Set
+import Data.Set as Set
 
 -- | A type which can be freshened has an operation which attempts to find a
 -- unique version of its input. The principal thing that must hold is that
@@ -11,19 +11,19 @@ import qualified Data.Set as Set
 -- necessary that `freshen` *eventually* produces a fresh value.
 --
 -- Variable identifier types must be instances of Freshen.
-class Eq v => Freshen v where
+class Eq v <= Freshen v where
   freshen :: v -> v
 
-instance Freshen Int where
+instance freshenInt :: Freshen Int where
   freshen n = n + 1
 
 -- | Freshen a variable until it can pass a given predicate.
-freshenUntil :: Freshen v => (v -> Bool) -> (v -> v)
+freshenUntil :: ∀ v. Freshen v => (v -> Bool) -> (v -> v)
 freshenUntil used = go where
   go v = if used v then go (freshen v) else v
 
 -- | Freshen a variable with respect to a set of variables. Or, freshen a
 -- variable until it's unique with respect to a set.
-freshWrt :: (Ord v, Freshen v) => Set v -> (v -> v)
-freshWrt used = freshenUntil (`Set.member` used)
+freshWrt :: ∀ v. (Ord v, Freshen v) => Set v -> (v -> v)
+freshWrt used = freshenUntil (_ `Set.member` used)
 
