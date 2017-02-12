@@ -1,6 +1,6 @@
 
 -- | Newtype for de Bruijn indices.
-module Zabt.Internal.Index where
+module Zabt.Index where
 
 import Prelude
 import Zabt.Freshen

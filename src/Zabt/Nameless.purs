@@ -1,8 +1,8 @@
 
-module Zabt.Internal.Nameless where
+module Zabt.Nameless where
 
 import Prelude
-import Zabt.Internal.Index
+import Zabt.Index
 
 data Scope v x = Scope v x
 

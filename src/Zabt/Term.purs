@@ -1,5 +1,5 @@
 
-module Zabt.Internal.Term where
+module Zabt.Term where
 
 import Data.Foldable
 import Data.Set (Set)
@@ -9,8 +9,8 @@ import Data.Map as Map
 import Data.Maybe
 import Data.Tuple
 import Prelude hiding (zero)
-import Zabt.Internal.Index
-import Zabt.Internal.Nameless
+import Zabt.Index
+import Zabt.Nameless
 
 -- | An abstract @'Term' v f@ is an abstract binding tree of the shape described
 -- by the pattern functor @f@ augmented with variables named by @v@. Equality is
