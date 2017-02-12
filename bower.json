@@ -1,1 +1,10 @@
-{"name":"purescript-zabt"}
+{
+  "name": "purescript-zabt",
+  "dependencies": {
+    "purescript-sets": "^2.0.0",
+    "purescript-prelude": "^2.3.0",
+    "purescript-tuples": "^3.1.0",
+    "purescript-maybe": "^2.0.1",
+    "purescript-foldable-traversable": "^2.2.0"
+  }
+}

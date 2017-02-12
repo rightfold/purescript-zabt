@@ -3,6 +3,7 @@ module Zabt.Freshen where
 
 import Data.Set (Set)
 import Data.Set as Set
+import Prelude
 
 -- | A type which can be freshened has an operation which attempts to find a
 -- unique version of its input. The principal thing that must hold is that
@@ -18,7 +19,7 @@ instance freshenInt :: Freshen Int where
   freshen n = n + 1
 
 -- | Freshen a variable until it can pass a given predicate.
-freshenUntil :: ∀ v. Freshen v => (v -> Bool) -> (v -> v)
+freshenUntil :: ∀ v. Freshen v => (v -> Boolean) -> (v -> v)
 freshenUntil used = go where
   go v = if used v then go (freshen v) else v
 

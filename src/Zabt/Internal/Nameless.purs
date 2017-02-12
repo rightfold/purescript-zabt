@@ -1,6 +1,7 @@
 
 module Zabt.Internal.Nameless where
 
+import Prelude
 import Zabt.Internal.Index
 
 data Scope v x = Scope v x
@@ -20,14 +21,11 @@ data Nameless v f x
   | Pattern (f x)
   | Abstraction (Scope v x)
 
-derive instance eqNameless :: Eq Nameless
-derive instance ordNameless :: Ord Nameless
+derive instance eqNameless :: (Eq v, Eq (f x), Eq x) => Eq (Nameless v f x)
+derive instance ordNameless :: (Ord v, Ord (f x), Ord x) => Ord (Nameless v f x)
 
 instance showNameless :: (Show v, Show (f x), Show x) => Show (Nameless v f x) where
-  showsPrec p (Free v) = showsPrec 11 v
-  showsPrec p (Bound i) = showString "'" . showsPrec 11 i
-  showsPrec p (Pattern f) = showsPrec p f
-  showsPrec p (Abstraction (Scope v t)) = showParen (p >= 11) $
-      showString "λ"
-    . showSpace
-    . showsPrec 11 t
+  show (Free v) = "(Free " <> show v <> ")"
+  show (Bound i) = "(Bound " <> show i <> ")"
+  show (Pattern f) = "(Pattern " <> show f <> ")"
+  show (Abstraction s) = "(Abstraction " <> show s <> ")"
